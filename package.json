@@ -1,0 +1,23 @@
+{
+  "name": "c2v",
+  "version": "1.0.0",
+  "description": "code/canvas to videos.",
+  "keywords": [
+    "code",
+    "canvas",
+    "videos",
+    "tool",
+    "system"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "license": "MIT",
+  "author": "anonymous",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  }
+}
