@@ -9,11 +9,24 @@ export class Main {
         this.defaultCanvasWidth = 1080;
         this.html = document.querySelector("html");
         this.body = document.querySelector("body") || document.body;
-        this.canvas = document.createElement("canvas");
+        this.canvas = this.#createCanvas();
         this.ctx = this.canvas.getContext("2d");
         this.body.prepend(this.canvas);
         this.runOnresize();
         window.onresize = () => this.runOnresize();
+    }
+
+    #createCanvas() {
+        const c = document.createElement("canvas");
+        const { defaultCanvasWidth: w, defaultCanvasHeight: h } = this;
+        const hw = { h: h, w: w, min: Math.min(h, w), max: Math.max(h, w) };
+        const minDmax = hw.min / hw.max;
+        const maxDmin = hw.max / hw.min;
+
+        c.height = hw.h;
+        c.width = hw.w;
+        c.style.aspectRatio = "9/16";
+        return c;
     }
 
     runOnresize() {
