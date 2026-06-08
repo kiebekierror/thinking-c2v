@@ -5,6 +5,8 @@ export class Main {
      * 控制 canvas 的基礎的 size, scale.
      */
     constructor() {
+        console.clear();
+
         this.defaultCanvasHeight = 1920;
         this.defaultCanvasWidth = 1080;
         this.html = document.querySelector("html");
@@ -12,14 +14,20 @@ export class Main {
         this.canvas = this.#createCanvas();
         this.ctx = this.canvas.getContext("2d");
         this.body.prepend(this.canvas);
+
         this.runOnresize();
         window.onresize = () => this.runOnresize();
     }
 
     #createCanvas() {
         const c = document.createElement("canvas");
-        const { defaultCanvasWidth: w, defaultCanvasHeight: h } = this;
-        const hw = { h: h, w: w, min: Math.min(h, w), max: Math.max(h, w) };
+        const { defaultCanvasWidth: dcw, defaultCanvasHeight: dch } = this;
+        const hw = {
+            h: dch,
+            w: dcw,
+            min: Math.min(dch, dcw),
+            max: Math.max(dch, dcw),
+        };
         const minDmax = hw.min / hw.max;
         const maxDmin = hw.max / hw.min;
 
@@ -30,10 +38,6 @@ export class Main {
     }
 
     runOnresize() {
-        const { canvas } = this;
-        canvas.height = window.innerHeight;
-        canvas.width = window.innerWidth;
-
         this.#htmlBody();
         this.#resize();
         this.#drawRect();
@@ -48,38 +52,53 @@ export class Main {
         body.style.width = `${window.innerWidth}px`;
     }
 
-    #calcWidth(a, b, c) {
-        return (a - b * c) * 0.5;
-    }
-
-    #calcHeight(a, b, c) {
-        return (a - b + b * c) * 0.5;
-    }
-
     #resize() {
+        const { innerHeight: wHeight, innerWidth: wWidth } = window;
         const { canvas } = this;
         canvas.height = this.defaultCanvasHeight;
         canvas.width = this.defaultCanvasWidth;
-        const { innerHeight: wHeight, innerWidth: wWidth } = window;
         // this.#setPosition(canvas);
-        let translateStr = "translate(-150%, -150%)";
-        let scale = 1;
-        if (wHeight < wWidth) {
-            const translate = [];
-            canvas.style.background = "rgba(255,0,0,.5)";
-            scale = wHeight / canvas.height;
-            canvas.style.scale = scale;
-            translate.push(this.#calcWidth(wWidth, canvas.width, scale));
-            translate.push(this.#calcHeight(canvas.height, wHeight, scale));
 
-            translateStr = `translate(-${translate[0]}px, -${translate[1]}px)`;
-            canvas.style.transform = `${translateStr}`;
-        } else {
-            canvas.style.background = "#0f0";
-            scale = wWidth / canvas.width;
-            canvas.style.scale = scale;
-            canvas.style.transform = `translate(-${wWidth * (1 + scale)}px, 0px)`;
+        const wSize = {
+            h: wHeight,
+            w: wWidth,
+            min: Math.min(wHeight, wWidth),
+            max: Math.max(wHeight, wWidth),
+        };
+        const cSize = {
+            h: canvas.height,
+            w: canvas.width,
+            min: Math.min(canvas.height, canvas.width),
+            max: Math.max(canvas.height, canvas.width),
+        };
+
+        const scaleByWidth = () => {
+            this.scale = wSize.w / cSize.w;
+        };
+        const scaleByHeight = () => {
+            this.scale = wSize.h / cSize.h;
+        };
+
+        const windowHeightLessThenCanvasHeight = wSize.h < cSize.h;
+        const windowWidthLessThenCanvasWidth = wSize.w < cSize.w;
+
+        // Todo: scal condition logic
+        if (wSize.h < cSize.h) {
+            canvas.style.backgroundColor = "rgba(255,0,0,.4)";
+            scaleByHeight();
         }
+
+        if (wSize.w < cSize.w) {
+            scaleByWidth();
+            canvas.style.backgroundColor = "rgba(0,255,0,.4)";
+            if (wSize.h < wSize.w) {
+                canvas.style.backgroundColor = "rgba(0,0,255,.4)";
+                scaleByHeight();
+            }
+        }
+
+        // this.scale = (wSize.h * cSize.h) / cSize.w;
+        canvas.style.scale = this.scale;
     }
 
     #setPosition() {
@@ -91,9 +110,13 @@ export class Main {
     }
 
     #drawRect() {
-        const num = 10;
+        const num = 10 * (1 + this.scale);
         const { ctx } = this;
         const { height, width } = ctx.canvas;
+        const center = {
+            x: width * 0.5,
+            y: height * 0.5,
+        };
         ctx.translate = 0;
         ctx.beginPath();
         ctx.fillStyle = "black";
@@ -101,11 +124,13 @@ export class Main {
         ctx.stroke();
 
         ctx.fillStyle = "rgba(0, 225, 255, 1)";
+        ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.font = "bold 90px Arial";
-        ctx.fillText(`n:${num},W:${width},H:${height}`, 100, 100);
-        ctx.fillText(`wH:${window.innerHeight}`, 100, 200);
-        ctx.fillText(`wW:${window.innerWidth}`, 100, 300);
+        ctx.fillText(`n:${num},W:${width},H:${height}`, center.x, center.y);
+        ctx.fillText(`wH:${window.innerHeight}`, center.x, center.y + 100);
+        ctx.fillText(`wW:${window.innerWidth}`, center.x, center.y + 200);
+        ctx.fillText(`scale:${this.scale}`, center.x, center.y + 300);
     }
 }
 
