@@ -83,10 +83,10 @@ export class Main {
             this.scale = windowSize.h / canvasSize.h;
         };
 
-        const canvasRatio = canvasSize.w / canvasSize.h;
-        const windowRatio = windowSize.w / windowSize.h;
+        this.canvasRatio = canvasSize.w / canvasSize.h;
+        this.windowRatio = windowSize.w / windowSize.h;
 
-        if (windowRatio <= canvasRatio) {
+        if (this.windowRatio <= this.canvasRatio) {
             scaleByWidth();
         } else {
             scaleByHeight();
@@ -128,16 +128,22 @@ export class Main {
     }
 
     debug() {
+        this.debugPre();
+    }
+
+    debugPre() {
         const pre = document.createElement("pre");
         pre.id = "pre";
-        pre.innerHTML = `canvasRatio:${canvasRatio}
-windowRatio:${windowRatio}`;
+        pre.style.position = "fixed";
+        pre.style.top = 0;
+        pre.style.left = 0;
+        pre.innerHTML = `canvasRatio:${this.canvasRatio}
+windowRatio:${this.windowRatio}`;
+        this.body.prepend(pre);
     }
 }
 
-const m = new Main();
-const ctx = m.ctx;
-const c = m.canvas;
-
-// window.onload = () => {
-// };
+window.onload = () => {
+    const main = new Main();
+    main.debug();
+};
