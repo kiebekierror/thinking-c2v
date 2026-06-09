@@ -2,9 +2,9 @@ export class CanvasUi {
     /**
      * UI inside canvas
      */
-    constructor(ctx) {
+    constructor(untitled) {
         // Todo
-        this.ctx = ctx;
+        this.untitled = untitled;
     }
 
     button() {
