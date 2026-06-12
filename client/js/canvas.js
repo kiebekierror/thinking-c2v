@@ -1,15 +1,30 @@
 export class Canvas {
     /**
-     * 負責創建 `document.createElement("canvas")` .
+     * 負責創建 `document.createElement("canvas")` 並 append 到 body.
      *
      * 控制 canvas 的基礎的 size, scale.
      */
-    constructor({ height = 100, width = 100 } = {}) {
+    constructor({
+        foo = window,
+        defaultCanvasHeight = 1920,
+        defaultCanvasWidth = 1080,
+        parentElement = document.querySelector("body") || document.body,
+        ctxType = "2d",
+    } = {}) {
+        // console.clear();
+
         this.scale = 1;
-        this.defaultCanvasHeight = height;
-        this.defaultCanvasWidth = width;
+        this.defaultCanvasHeight = defaultCanvasHeight;
+        this.defaultCanvasWidth = defaultCanvasWidth;
+        this.parentElement = parentElement;
+        this.html = document.querySelector("html");
         this.canvas = this.#createCanvas();
-        this.ctx = this.canvas.getContext("2d");
+        this.ctx = this.canvas.getContext(ctxType);
+        this.parentElement.prepend(this.canvas);
+
+        this.escButton();
+        this.runOnresize();
+        window.onresize = () => this.runOnresize();
     }
 
     #createCanvas() {
@@ -27,13 +42,32 @@ export class Canvas {
         c.id = "c";
         c.height = chw.h;
         c.width = chw.w;
+        c.style.backgroundColor = "rgba(0,0,0,.4)";
         // c.style.aspectRatio = "9/16";
         return c;
     }
 
     runOnresize() {
         this.#resize();
+        this.#htmlBody();
+
         this.#drawRect();
+    }
+
+    #htmlBody() {
+        const { html, parentElement: pe } = this;
+        html.style.height = `${window.innerHeight}px`;
+        html.style.width = `${window.innerWidth}px`;
+        // html.style.backgroundColor = "rgba(255,0,0,.6)";
+
+        pe.style.height = `${this.defaultCanvasHeight * this.scale}px`;
+        pe.style.width = `${this.defaultCanvasWidth * this.scale}px`;
+        pe.style.position = "relative";
+        pe.style.backgroundColor = "rgba(0,0,255,.0)";
+        pe.style.display = "flex";
+        pe.style.justifyContent = "center";
+        pe.style.alignItems = "center";
+        // this.#setPosition();
     }
 
     #resize() {
@@ -41,7 +75,6 @@ export class Canvas {
         const { canvas } = this;
         canvas.height = this.defaultCanvasHeight;
         canvas.width = this.defaultCanvasWidth;
-        // this.#setPosition(canvas);
 
         const windowSize = {
             h: wHeight,
@@ -64,15 +97,50 @@ export class Canvas {
         };
 
         this.canvasRatio = canvasSize.w / canvasSize.h;
-        this.windowRatio = windowSize.w / windowSize.h;
+        this.parentElementRatio = windowSize.w / windowSize.h;
 
-        if (this.windowRatio <= this.canvasRatio) {
+        if (this.parentElementRatio <= this.canvasRatio) {
             scaleByWidth();
         } else {
             scaleByHeight();
         }
 
         canvas.style.scale = this.scale;
+    }
+
+    escButton() {
+        /**
+         * Todo: button for call up menu in canvas.
+         * when button pressed it hidden, menu up.
+         * when menu closed, button show again.
+         * it hidden for don't block button in menu.
+         *
+         * it style like ios floating button.
+         */
+
+        const size = 32;
+        const button = document.createElement("div");
+        this.parentElement.prepend(button);
+        button.style.position = "absolute";
+        button.style.height = size + "px";
+        button.style.width = size + "px";
+        button.style.top = "50%";
+        button.style.right = `${0 * size}px`;
+        button.translate = "transform(-50%,0)";
+        button.style.backgroundColor = "rgba(255,0,0,1)";
+        button.style.borderRadius = "5px";
+        button.style.zIndex = 5;
+        button.onclick = () => {};
+    }
+
+    // below code are for debug, not important.
+
+    #setPosition() {
+        const { canvas, parentElement: pe } = this;
+        // canvas.style.position = "absolute";
+        // canvas.style.top = `-${canvas.offsetTop - canvas.offsetTop * this.scale * 0.5}px`;
+        // canvas.style.left = `-${canvas.offsetLeft - canvas.offsetLeft * this.scale * 0.5}px`;
+        // canvas.style.transform = `translate(-${canvas.offsetParent}%, -${canvas.offsetParent}%)`;
     }
 
     #drawRect() {
@@ -98,8 +166,19 @@ export class Canvas {
         ctx.fillText(`wW:${window.innerWidth}`, center.x, center.y + 200);
         ctx.fillText(`scale:${this.scale}`, center.x, center.y + 300);
     }
-}
 
-window.onload = () => {
-    const main = new Main();
-};
+    debug() {
+        this.debugPre();
+    }
+
+    debugPre() {
+        const pre = document.createElement("pre");
+        pre.id = "pre";
+        pre.style.position = "fixed";
+        pre.style.top = 0;
+        pre.style.left = 0;
+        pre.innerHTML = `canvasRatio:${this.canvasRatio}
+windowRatio:${this.parentElementRatio}`;
+        this.parentElement.prepend(pre);
+    }
+}
