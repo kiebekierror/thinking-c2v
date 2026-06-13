@@ -20,19 +20,23 @@ export class Main {
 
         // 3. 初始化 UI，並透過 config 注入業務邏輯信號
         const ui = new CanvasUi(canvasInstance, {
-            onStartAnimation: () => {
-                animation.triggerStart(); // 通知動畫重置或啟動渲染
-            },
-            onToggleRecord: (updateUiState) => {
-                if (!recorder.isRecording) {
-                    recorder.start();
-                    updateUiState(true); // 通知 UI 更新為停止錄製狀態
-                } else {
-                    recorder.stop();
-                    updateUiState(false); // 通知 UI 更新為常態錄製狀態
-                }
+            config: {
+                onStartAnimation: () => {
+                    animation.triggerStart(); // 通知動畫重置或啟動渲染
+                },
+                onToggleRecord: (updateUiState) => {
+                    if (!recorder.isRecording) {
+                        recorder.start();
+                        updateUiState(true); // 通知 UI 更新為停止錄製狀態
+                    } else {
+                        recorder.stop();
+                        updateUiState(false); // 通知 UI 更新為常態錄製狀態
+                    }
+                },
             },
         });
+
+        this.untitled(canvasInstance);
 
         canvasInstance.ui = ui;
         canvasInstance.recorder = recorder; // 掛載以便主循環提取
@@ -44,6 +48,10 @@ export class Main {
 
         animation.start();
     }
+
+    untitled(canvas) {
+        this.canvas = canvas;
+    }
 }
 
-const main = new Main();
+export const main = new Main();

@@ -2,9 +2,9 @@ import { Button } from "./button.js";
 import { UiComponent } from "./uiComponent.js";
 
 export class CanvasUi {
-    constructor(canvasInstance, config = {}) {
-        this.canvas = canvasInstance.canvas;
-        this.ctx = canvasInstance.ctx;
+    constructor(canvas, config = {}) {
+        this.canvas = canvas.canvas;
+        this.ctx = canvas.ctx;
         this.visible = false;
 
         this.root = new UiComponent({
@@ -17,8 +17,15 @@ export class CanvasUi {
         // 外部傳入的信號回呼函式 (Callbacks)
         this.onStartAnimation = config.onStartAnimation || (() => {});
         this.onToggleRecord = config.onToggleRecord || (() => {});
-
         this.init();
+
+        canvas.escButton.onclick = () => {
+            alert("dlkjflksadj");
+        };
+
+        canvas.escButton.onClick = () => {
+            alert("dlkjflksadj");
+        };
     }
 
     init() {

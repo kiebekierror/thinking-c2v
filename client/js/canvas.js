@@ -118,6 +118,7 @@ export class Canvas {
         const size = 32;
         const button = document.createElement("div");
         this.parentElement.prepend(button);
+        button.id = "escButton";
         button.style.position = "absolute";
         button.style.height = size + "px";
         button.style.width = size + "px";
