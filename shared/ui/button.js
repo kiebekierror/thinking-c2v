@@ -1,4 +1,4 @@
-import { UiComponent } from "./uiComponent";
+import { UiComponent } from "./uiComponent.js";
 
 export class Button extends UiComponent {
     constructor({

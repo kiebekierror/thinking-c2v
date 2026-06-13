@@ -1,14 +1,19 @@
-// /storage/emulated/0/1/gitroot/thinking/c2v/shared/ui/canvasUi.js
-import { UiComponent, Button } from "./button.js";
+import { Button } from "./button.js";
+import { UiComponent } from "./uiComponent.js";
 
 export class CanvasUi {
     constructor(canvasInstance, config = {}) {
         this.canvas = canvasInstance.canvas;
         this.ctx = canvasInstance.ctx;
         this.visible = false;
-        
-        this.root = new UiComponent({ x: 0, y: 0, width: this.canvas.width, height: this.canvas.height });
-        
+
+        this.root = new UiComponent({
+            x: 0,
+            y: 0,
+            width: this.canvas.width,
+            height: this.canvas.height,
+        });
+
         // 外部傳入的信號回呼函式 (Callbacks)
         this.onStartAnimation = config.onStartAnimation || (() => {});
         this.onToggleRecord = config.onToggleRecord || (() => {});
@@ -23,54 +28,66 @@ export class CanvasUi {
             x: (this.canvas.width - panelWidth) / 2,
             y: (this.canvas.height - panelHeight) / 2,
             width: panelWidth,
-            height: panelHeight
+            height: panelHeight,
         });
         this.root.addChild(this.menuPanel);
 
         // 按鈕 1：發出開始動畫訊號
-        this.menuPanel.addChild(new Button({
-            x: 50, y: 50, width: 300, height: 70, 
-            text: "START ANIMATION",
-            onClick: () => {
-                this.visible = false;
-                this.onStartAnimation(); // 發出訊號
-            }
-        }));
+        this.menuPanel.addChild(
+            new Button({
+                x: 50,
+                y: 50,
+                width: 300,
+                height: 70,
+                text: "START ANIMATION",
+                onClick: () => {
+                    this.visible = false;
+                    this.onStartAnimation(); // 發出訊號
+                },
+            }),
+        );
 
         // 按鈕 2：發出錄製狀態切換訊號
         this.recButton = new Button({
-            x: 50, y: 160, width: 300, height: 70, 
+            x: 50,
+            y: 160,
+            width: 300,
+            height: 70,
             text: "RECORDING",
             onClick: () => {
                 this.onToggleRecord((isRecording) => {
                     // 提供一個反向更新按鈕文字的機制
-                    this.recButton.text = isRecording ? "STOP RECORD" : "RECORDING";
+                    this.recButton.text = isRecording
+                        ? "STOP RECORD"
+                        : "RECORDING";
                 });
-            }
+            },
         });
         this.menuPanel.addChild(this.recButton);
 
         this.canvas.addEventListener("click", (e) => this.handleClick(e));
     }
 
-    toggle() { 
-        this.visible = !this.visible; 
+    toggle() {
+        this.visible = !this.visible;
     }
 
     handleClick(e) {
         if (!this.visible) return;
         const rect = this.canvas.getBoundingClientRect();
-        const clickX = ((e.clientX - rect.left) / rect.width) * this.canvas.width;
-        const clickY = ((e.clientY - rect.top) / rect.height) * this.canvas.height;
+        const clickX =
+            ((e.clientX - rect.left) / rect.width) * this.canvas.width;
+        const clickY =
+            ((e.clientY - rect.top) / rect.height) * this.canvas.height;
         this.dispatchClick(this.root, clickX, clickY);
     }
 
     dispatchClick(component, mx, my) {
         for (const child of component.children) {
             if (child.isHit(mx, my)) {
-                if (child.onClick) { 
-                    child.onClick(); 
-                    return true; 
+                if (child.onClick) {
+                    child.onClick();
+                    return true;
                 }
                 if (this.dispatchClick(child, mx, my)) return true;
             }
@@ -87,9 +104,8 @@ export class CanvasUi {
 
     drawComponent(component) {
         if (component.draw) component.draw(this.ctx);
-        for (const child of component.children) { 
-            this.drawComponent(child); 
+        for (const child of component.children) {
+            this.drawComponent(child);
         }
     }
 }
-

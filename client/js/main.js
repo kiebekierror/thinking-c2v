@@ -45,4 +45,5 @@ export class Main {
         animation.start();
     }
 }
+
 const main = new Main();
