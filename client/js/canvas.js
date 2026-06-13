@@ -61,11 +61,10 @@ export class Canvas {
         pe.style.height = `${this.defaultCanvasHeight * this.scale}px`;
         pe.style.width = `${this.defaultCanvasWidth * this.scale}px`;
         pe.style.position = "relative";
-        pe.style.backgroundColor = "rgba(0,0,255,.0)";
+        pe.style.backgroundColor = "rgba(0,0,255,.1)";
         pe.style.display = "flex";
         pe.style.justifyContent = "center";
         pe.style.alignItems = "center";
-        // this.#setPosition();
     }
 
     #resize() {
@@ -136,15 +135,6 @@ export class Canvas {
     }
 
     // below code are for debug, not important.
-
-    #setPosition() {
-        const { canvas, parentElement: pe } = this;
-        // canvas.style.position = "absolute";
-        // canvas.style.top = `-${canvas.offsetTop - canvas.offsetTop * this.scale * 0.5}px`;
-        // canvas.style.left = `-${canvas.offsetLeft - canvas.offsetLeft * this.scale * 0.5}px`;
-        // canvas.style.transform = `translate(-${canvas.offsetParent}%, -${canvas.offsetParent}%)`;
-    }
-
     #drawRect() {
         const num = 10 * (1 + this.scale);
         const { ctx } = this;
