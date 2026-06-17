@@ -17,11 +17,7 @@ export class Main {
             });
 
             const animation = new CodeRain(canvas);
-            const animate = () => {
-                animation.draw();
-                requestAnimationFrame(animate);
-            };
-            animate();
+            animation.start();
         };
     }
 }
