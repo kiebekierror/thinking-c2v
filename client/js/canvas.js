@@ -22,7 +22,7 @@ export class Canvas {
         this.ctx = this.canvas.getContext(ctxType);
         this.parentElement.prepend(this.canvas);
 
-        this.escButton();
+        this.untitled = this.escButton();
         this.runOnresize();
         window.onresize = () => this.runOnresize();
     }
@@ -130,7 +130,10 @@ export class Canvas {
         button.style.backgroundColor = "rgba(255,0,0,1)";
         button.style.borderRadius = "5px";
         button.style.zIndex = 5;
-        button.onclick = () => {};
+        button.onclick = () => {
+            this.runOnresize();
+        };
+        return button;
     }
 
     // below code are for debug, not important.
