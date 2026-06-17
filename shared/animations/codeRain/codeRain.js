@@ -10,10 +10,21 @@ export class CodeRain {
 
     start() {
         const animate = () => {
-            this.draw();
+            if (this.isRunning) {
+                this.draw(); 
+            }
+        
+            if (this.canvasInstance.ui) {
+                this.canvasInstance.ui.draw();
+            }
+            
+            if (this.canvasInstance.recorder) {
+                this.canvasInstance.recorder.captureFrame();
+            }
+        
             requestAnimationFrame(animate);
         };
-        animate();
+
     }
 
     draw() {

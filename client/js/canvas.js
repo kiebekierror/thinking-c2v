@@ -22,7 +22,7 @@ export class Canvas {
         this.ctx = this.canvas.getContext(ctxType);
         this.parentElement.prepend(this.canvas);
 
-        this.untitled = this.escButton();
+        this.escButton = this.#escButton();
         this.runOnresize();
         window.onresize = () => this.runOnresize();
     }
@@ -108,7 +108,7 @@ export class Canvas {
         canvas.style.scale = this.scale;
     }
 
-    escButton() {
+    #escButton() {
         /**
          * Todo: button for call up menu in canvas.
          * when button pressed it hidden, menu up.
