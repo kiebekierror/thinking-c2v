@@ -11,8 +11,6 @@ export class Canvas {
         parentElement = document.querySelector("body") || document.body,
         ctxType = "2d",
     } = {}) {
-        // console.clear();
-
         this.scale = 1;
         this.defaultCanvasHeight = defaultCanvasHeight;
         this.defaultCanvasWidth = defaultCanvasWidth;
@@ -126,11 +124,12 @@ export class Canvas {
         button.style.width = size + "px";
         button.style.top = "50%";
         button.style.right = `${0 * size}px`;
-        button.translate = "transform(-50%,0)";
+        button.style.translate = "transform(-50%,0)";
         button.style.backgroundColor = "rgba(255,0,0,1)";
         button.style.borderRadius = "5px";
-        button.style.zIndex = 5;
+        button.style.zIndex = 9999;
         button.onclick = () => {
+            alert("from client/js/canvas.js");
             this.runOnresize();
         };
         return button;

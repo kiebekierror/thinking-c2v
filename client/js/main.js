@@ -7,8 +7,6 @@ export class Main {
     bootstrap() {
         window.onload = () => {
             const canvasInstance = new Canvas();
-            canvasInstance.escButton = canvasInstance.escButton; // 橋接命名
-
             // 1. 初始化獨立的錄製工具
             const recorder = new FbfRecorder(canvasInstance.canvas);
 
