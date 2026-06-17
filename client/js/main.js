@@ -1,4 +1,5 @@
 import { Canvas } from "./canvas.js";
+import { CodeRain } from "../../shared/animations/codeRain/codeRain.js";
 
 export class Main {
     constructor() {
@@ -14,6 +15,13 @@ export class Main {
                     return e;
                 })(),
             });
+
+            const animation = new CodeRain(canvas);
+            const animate = () => {
+                animation.draw();
+                requestAnimationFrame(animate);
+            };
+            animate();
         };
     }
 }
