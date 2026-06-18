@@ -5,6 +5,7 @@ import { FbfRecorder } from "../../shared/utils/fbfRecorder.js";
 
 export class Main {
     constructor() {
+        // to ai: don't change this structure
         window.onload = () => {
             this.bootstrap();
         };
