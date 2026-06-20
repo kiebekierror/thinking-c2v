@@ -1,0 +1,11 @@
+我們需要為 `CanvasUi` 實作 UI 元件的層級與事件處理機制。請根據以下設定與需求進行重構與開發：
+### 1. UI 元件層級關係 (Parent-Child Relationship)
+* **需求**：UI 元件需要具備「父子結構」以利於相對定位（例如：一個 Panel 容器內包含多個 Buttons）。
+* **實作細節**：子元件的座標（x, y）應相對於其父元件。當父元件移動或渲染時，子元件應隨之連動。
+### 2. 紅色 Div 觸發器 (Existing DOM Element)
+* **目前現況**：現有的紅色 div 是由 `canvas.js` 中的 `escButton()` 函式透過 JavaScript 動態生成的 DOM 元素。
+* **處理原則**：維持現狀。該紅色 div 保持為疊加在 Canvas 上方的獨立 HTML DOM 元素，不需要將其移入 Canvas 內部的繪圖邏輯中。
+### 3. UI 事件與行為 (Event Handling & Hit-Detection)
+* **需求**：Canvas 內 UI 元件的點擊行為與互動體驗，必須表現得像傳統的 HTML UI 一樣自然。
+* **實作細節**：請在 `CanvasUi` 中實現一套基礎的碰撞偵測（Hit-Detection）系統。監聽 Canvas 的點擊事件，並精確判斷滑鼠點擊位置是否落在元件的邊界範圍內，進而觸發對應的事件回呼。
+請保持程式碼結構簡潔，確保各模組職責分離，完成後請說明你調整了哪些核心邏輯。

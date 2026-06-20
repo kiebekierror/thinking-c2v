@@ -1,0 +1,16 @@
+不對。猜得不對，要你猜確實難為你了。client和nodejs都不是主要的。主要的是shared。client是提供瀏覽器端界面，nodejs主要是實現通過後端直接渲染與瀏覽器端所看到的一致內容的video。
+
+shared是共用的邏輯。
+
+這個項目c2v意為code/canvas to video。
+
+遊戲是一種可交互的動畫。會把遊戲的操作錄製，有些遊戲是神經網絡來操作，c2v只錄製。
+
+這是一個用Media recorder或同類技術來記錄動畫成為影片的系統。前端簡單的實現是raf加Media recorder，但考慮兼顧低性能設備而開發出fbf的錄製邏輯。說到錄製，ui也是可被錄製內容的一部分，那麼還需要操作可視化指示器。
+
+現在只有button是不夠的，還需要label和輸入框，CheckBox。這裡canvas默認是1920*1080，這個參數應該是可通過canvas ui來配置的。config JSON不是主要的，當前也沒有投入使用，我考慮用數據庫來存儲配置。
+
+
+
+
+
