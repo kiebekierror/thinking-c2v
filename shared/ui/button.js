@@ -37,7 +37,6 @@ export class Button extends UiComponent {
         const ax = this.absoluteX;
         const ay = this.absoluteY;
 
-        // 按鈕主體
         ctx.fillStyle = this.backgroundColor;
         ctx.strokeStyle = this.borderColor;
         ctx.lineWidth = 2;
@@ -46,7 +45,6 @@ export class Button extends UiComponent {
         ctx.fill();
         ctx.stroke();
 
-        // 按鈕文字
         ctx.fillStyle = this.color;
         ctx.font = "bold 28px monospace";
         ctx.textAlign = this.textAlign;

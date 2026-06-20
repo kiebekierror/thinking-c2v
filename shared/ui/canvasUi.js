@@ -13,19 +13,11 @@ export class CanvasUi {
             width: this.canvas.width,
             height: this.canvas.height,
         });
+        this.config = config;
 
-        // 外部傳入的信號回呼函式 (Callbacks)
-        this.onStartAnimation = config.onStartAnimation || (() => {});
-        this.onToggleRecord = config.onToggleRecord || (() => {});
+        this.onStartAnimation = this.config.onStartAnimation || (() => {});
+        this.onToggleRecord = this.config.onToggleRecord || (() => {});
         this.init();
-
-        canvas.escButton.onclick = () => {
-            alert("dlkjflksadj");
-        };
-
-        canvas.escButton.onClick = () => {
-            alert("dlkjflksadj");
-        };
     }
 
     init() {
@@ -39,7 +31,6 @@ export class CanvasUi {
         });
         this.root.addChild(this.menuPanel);
 
-        // 按鈕 1：發出開始動畫訊號
         this.menuPanel.addChild(
             new Button({
                 x: 50,
@@ -49,12 +40,11 @@ export class CanvasUi {
                 text: "START ANIMATION",
                 onClick: () => {
                     this.visible = false;
-                    this.onStartAnimation(); // 發出訊號
+                    this.onStartAnimation();
                 },
             }),
         );
 
-        // 按鈕 2：發出錄製狀態切換訊號
         this.recButton = new Button({
             x: 50,
             y: 160,
@@ -63,7 +53,6 @@ export class CanvasUi {
             text: "RECORDING",
             onClick: () => {
                 this.onToggleRecord((isRecording) => {
-                    // 提供一個反向更新按鈕文字的機制
                     this.recButton.text = isRecording
                         ? "STOP RECORD"
                         : "RECORDING";
@@ -103,6 +92,8 @@ export class CanvasUi {
     }
 
     draw() {
+        const { width, height } = this.ctx.canvas;
+        this.ctx.clearRect(0, 0, width, height);
         if (!this.visible) return;
         this.ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);

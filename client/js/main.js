@@ -13,44 +13,39 @@ export class Main {
 
     bootstrap() {
         const canvasInstance = new Canvas();
-        // 1. 初始化獨立的錄製工具
         const recorder = new FbfRecorder(canvasInstance.canvas);
-
-        // 2. 初始化動畫（讓動畫自己去持有錄製器或信號，決定何時開跑）
         const animation = new CodeRain(canvasInstance);
-
-        // 3. 初始化 UI，並透過 config 注入業務邏輯信號
         const ui = new CanvasUi(canvasInstance, {
-            config: {
-                onStartAnimation: () => {
-                    animation.triggerStart(); // 通知動畫重置或啟動渲染
-                },
-                onToggleRecord: (updateUiState) => {
-                    if (!recorder.isRecording) {
-                        recorder.start();
-                        updateUiState(true); // 通知 UI 更新為停止錄製狀態
-                    } else {
-                        recorder.stop();
-                        updateUiState(false); // 通知 UI 更新為常態錄製狀態
-                    }
-                },
+            onStartAnimation: () => {
+                animation.start();
+                console.log(animation);
+                console.log("onStartAnimation");
+            },
+            onToggleRecord: (updateUiState) => {
+                if (!recorder.isRecording) {
+                    recorder.start();
+                    updateUiState(true);
+                } else {
+                    recorder.stop();
+                    updateUiState(false);
+                }
             },
         });
 
-        this.untitled(canvasInstance);
+        this.setCanvas(canvasInstance);
 
         canvasInstance.ui = ui;
-        canvasInstance.recorder = recorder; // 掛載以便主循環提取
+        canvasInstance.recorder = recorder;
 
-        // 實體 HTML 按鈕行為切換選單
         canvasInstance.escButton.onclick = () => {
             ui.toggle();
+            ui.draw();
         };
 
         animation.start();
     }
 
-    untitled(canvas) {
+    setCanvas(canvas) {
         this.canvas = canvas;
     }
 }

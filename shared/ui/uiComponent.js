@@ -19,6 +19,8 @@ export class UiComponent {
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
         this.color = color;
+        this.textAlign = textAlign;
+        this.textBaseline = textBaseline;
         this.parent = null;
         this.children = [];
     }
